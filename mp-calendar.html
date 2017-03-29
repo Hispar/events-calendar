@@ -203,7 +203,7 @@
 
                 this.currentMonth = this.monthLabels[this.showDate.month];
                 this._makeCalendar(this.showDate.year, this.showDate.month);
-                this.fire('prevMonth');
+                this.fire('prev-month');
             },
 
             // Move to the next month.
@@ -216,7 +216,7 @@
 
                 this.currentMonth = this.monthLabels[this.showDate.month];
                 this._makeCalendar(this.showDate.year, this.showDate.month);
-                this.fire('nextMonth');
+                this.fire('next-month');
             },
 
             // Switch to the right calendar page, based on the set date.
@@ -243,15 +243,15 @@
                     }
                 }
 
-                this.fire('dateSelected', this.date);
+                this.fire('date-selected', this.date);
 
                 if (!!newDate && !!oldDate) {
                     if (newDate.date.getMonth() > oldDate.date.getMonth()) {
-                        this.fire('nextMonth');
+                        this.fire('next-month');
                         this._makeCalendar(this.showDate.year, this.showDate.month);
                     }
                     if (newDate.date.getMonth() < oldDate.date.getMonth()) {
-                        this.fire('prevMonth');
+                        this.fire('prev-month');
                         this._makeCalendar(this.showDate.year, this.showDate.month);
                     }
                 }
