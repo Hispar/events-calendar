@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../fa-awesome/fa-awesome.html">
 <link rel="import" href="mp-calendar-theme.html">
-
+<link rel="import" href="mp-calendar-day.html">
 <!--
 
     `mp-calendar` is a simple Polymer element
@@ -38,7 +38,7 @@
             <div id="mpCalendar"></div>
         </div>
     </template>
-
+    <script src="../moment/moment.js"></script>
     <script>
         Polymer({
             is: 'mp-calendar',
@@ -119,6 +119,22 @@
                     },
                     observer: '_dateChanged'
                 },
+
+                // Events list by day
+                events: {
+                    type: Object,
+                    value: {
+                        '2017-03-01' : [
+                            {
+                                slot: '7-11',
+                                name: '',
+                                category: 'S'
+                            }
+                        ]
+                    }
+//                    observer: '_onOpen',
+//                    reflectToAttribute: true
+                }
             },
 
             /**
@@ -267,7 +283,7 @@
                     month: today.getMonth() + 1,
                     year: today.getFullYear()
 //                    isoDate: dataDate
-                }
+                };
 
                 this._makeCalendar(this.showDate.year, this.showDate.month);
             },
@@ -342,10 +358,15 @@
                 days.className += "mp-cld-days";
 
                 for (var i = 0; i < self.showDaysInMonth; i++) {
-                    var day = document.createElement('span');
+                    var day = document.createElement('mp-calendar-day');
                     // separated into weeks
                     if (i % 7 === 0) {
                         var week = document.createElement('div');
+                        week.addEventListener('date-selected', function (event) {
+                            var days = this.querySelectorAll('mp-calendar-day').forEach(function (day) {
+                                day.open = !day.open;
+                            })
+                        });
                         week.className += "mp-cld-week";
                         week.setAttribute("week", i / 7);
                     }
@@ -353,18 +374,13 @@
                     if (i < (dayOfMonthStart - self.firstDayOfWeek)) {
                         day.className += "mp-cld-day prevMonth";
 
-                        if (self.disablePrevDays) {
-                            day.innerHTML += "&nbsp;";
-                            day.className += " disabled";
-                        }
-                        else {
-                            var number = self._dayNumber((previousMonthDays - dayOfMonthStart) + (i + 1 + self.firstDayOfWeek), previousMonth + 1, previousYear, day);
-                        }
+                        day.disabled = self.disablePrevDays;
+                        day.date = moment().year(previousYear).month(previousMonth).date((previousMonthDays - dayOfMonthStart) + (i + 1 + self.firstDayOfWeek)).format();
                     }
 
                     else if (dayN <= currentMonthDays) {
                         day.className += "mp-cld-day currMonth";
-                        var number = self._dayNumber(dayN++, currentMonth + 1, year, day);
+                        day.date = moment().year(year).month(currentMonth).date(dayN++).format();
 
                         // If today
                         if ((dayN - 1) == thisDay && month == thisMonth - 1 && thisYear == year) {
@@ -378,10 +394,14 @@
 
                     else {
                         day.className += "mp-cld-day nextMonth";
-                        var number = self._dayNumber(dayOfNextMonth++, nextMonth + 1, nextYear, day);
+                        day.disabled = true;
+                        day.date = moment().year(nextYear).month(nextMonth).date(dayOfNextMonth++).format();
                     }
 
                     days.appendChild(week);
+                    if (this.events[day.formattedDate] !== undefined) {
+                        day.events = this.events[day.formattedDate];
+                    }
                     week.appendChild(day);
                 }
                 mainSection.appendChild(days);
@@ -391,21 +411,6 @@
             // The month passed in is 1 for January, 2 for February and so on
             _numberOfDays: function (year, month) {
                 return new Date(year, month, 0).getDate();
-            },
-
-            // build each day and add attributes
-            _dayNumber: function (dayDate, month, year, dayElem) {
-                // set 2 digit number
-                var span = document.createElement('span');
-                var dd = (dayDate < 10 ? '0' : '') + dayDate;
-                var mm = (month < 10 ? '0' : '') + month;
-                var dataDate = (year + "-" + mm + "-" + dd);
-
-                dayElem.className += " day";
-                dayElem.innerHTML += dayDate;
-                dayElem.setAttribute("data-date", dataDate);
-
-                return dayElem;
             }
         });
     </script>
