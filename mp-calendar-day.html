@@ -11,11 +11,21 @@
         :host .assigned{
             background: greenyellow;
         }
+
+        :host .mp-cld-day {
+            margin: 0;
+            /*padding: 10px;*/
+            font-size: 16px;
+            border: 1px solid #f7f7f7;
+            cursor: pointer;
+            z-index: 5;
+            transition: all .3s ease-in-out
+        }
     </style>
     <template>
         <h4 on-click="_onDayClicked">{{ day }}</h4>
         <iron-collapse id="collapse" opened="[[open]]">
-            <template is="dom-repeat" items="[[events]]">
+            <template is="dom-repeat" items="[[eventList]]">
                 <p class$="[[_getAssigned(item)]]">{{ item.slot }} - {{ item.name }} - {{ item.category }}</p>
             </template>
         </iron-collapse>
@@ -34,13 +44,13 @@
 //                    observer: '_onOpen',
 //                    reflectToAttribute: true
                 },
-                // Events list for the day
-                events: {
+
+                // Events list by day
+                eventList: {
                     type: Array,
                     value: []
-//                    observer: '_onOpen',
-//                    reflectToAttribute: true
                 },
+
                 /**
                  * The current date.
                  */
