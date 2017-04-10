@@ -1,11 +1,7 @@
 {
-  "name": "mp-calendar",
-  "description": "A simple calendar web components",
+  "name": "events-calendar",
+  "description": "An events calendar web components",
   "version": "0.1.0",
-  "homepage": "http://minas.pachnis.com",
-  "authors": [
-    "Minas Pachnis <minas@bugeffect.com>"
-  ],
   "keywords": [
     "calendar",
     "datepicker",
@@ -13,10 +9,10 @@
     "web-components"
   ],
   "license": "MIT",
-  "main": "mp-calendar.html",
+  "main": "events-calendar.html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mpachnis/mp-calendar.git"
+    "url": "https://github.com/Hispar/events-calendar.git"
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.6.0",

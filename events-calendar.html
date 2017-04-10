@@ -1,20 +1,20 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../fa-awesome/fa-awesome.html">
-<link rel="import" href="mp-calendar-theme.html">
-<link rel="import" href="mp-calendar-day.html">
+<link rel="import" href="events-calendar-theme.html">
+<link rel="import" href="events-calendar-day.html">
 <!--
 
-    `mp-calendar` is a simple Polymer element
+    `events-calendar` is a simple Polymer element
 
     ### Example
 
-        <mp-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'></mp-calendar>
+        <events-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'></events-calendar>
 
     @demo demo/index.html
 -->
 
-<dom-module id="mp-calendar">
-    <style is="custom-style" include="mp-calendar-theme"></style>
+<dom-module id="events-calendar">
+    <style is="custom-style" include="events-calendar-theme"></style>
 
     <template>
         <div id="content">
@@ -41,7 +41,7 @@
     <script src="../moment/moment.js"></script>
     <script>
         Polymer({
-            is: 'mp-calendar',
+            is: 'events-calendar',
 
             properties: {
 
@@ -294,10 +294,10 @@
                 this.$.mpCalendar.innerHTML = '';
 
                 var mainSection = document.createElement('div');
-                mainSection.className += "mp-cld-main";
+                mainSection.className += "events-cld-main";
 
                 var labels = document.createElement('div');
-                labels.className = 'mp-cld-labels';
+                labels.className = 'events-cld-labels';
                 var labelsList = this.dayLabels;
 
                 for (var i = 0; i < labelsList.length; i++) {
@@ -305,7 +305,7 @@
                     // get the first day based on firstDay property
                     var dayName = (i + this.firstDayOfWeek) % 7;
 
-                    label.className += "mp-cld-label";
+                    label.className += "events-cld-label";
                     label.innerHTML = labelsList[dayName];
                     labels.appendChild(label);
                 }
@@ -347,31 +347,31 @@
                 var dayOfNextMonth = 1;
 
                 var days = document.createElement('div');
-                days.className += "mp-cld-days";
+                days.className += "events-cld-days";
 
                 for (var i = 0; i < self.showDaysInMonth; i++) {
-                    var day = document.createElement('mp-calendar-day');
+                    var day = document.createElement('events-calendar-day');
                     // separated into weeks
                     if (i % 7 === 0) {
                         var week = document.createElement('div');
                         week.addEventListener('date-selected', function (event) {
-                            var days = this.querySelectorAll('mp-calendar-day').forEach(function (day) {
+                            var days = this.querySelectorAll('events-calendar-day').forEach(function (day) {
                                 day.open = !day.open;
                             })
                         });
-                        week.className += "mp-cld-week";
+                        week.className += "events-cld-week";
                         week.setAttribute("week", i / 7);
                     }
 
                     if (i < (dayOfMonthStart - self.firstDayOfWeek)) {
-                        day.className += "mp-cld-day prevMonth";
+                        day.className += "events-cld-day prevMonth";
 
                         day.disabled = self.disablePrevDays;
                         day.date = moment().year(previousYear).month(previousMonth).date((previousMonthDays - dayOfMonthStart) + (i + 1 + self.firstDayOfWeek)).format();
                     }
 
                     else if (dayN <= currentMonthDays) {
-                        day.className += "mp-cld-day currMonth";
+                        day.className += "events-cld-day currMonth";
                         day.date = moment().year(year).month(currentMonth).date(dayN++).format();
 
                         // If today
@@ -385,7 +385,7 @@
                     }
 
                     else {
-                        day.className += "mp-cld-day nextMonth";
+                        day.className += "events-cld-day nextMonth";
                         day.disabled = true;
                         day.date = moment().year(nextYear).month(nextMonth).date(dayOfNextMonth++).format();
                     }
