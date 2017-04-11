@@ -42,7 +42,9 @@
     <script>
         Polymer({
             is: 'events-calendar',
-
+            listeners: {
+                'showEvent': '_showEvent'
+            },
             properties: {
 
                 // Disable previous month days
@@ -403,6 +405,10 @@
             // The month passed in is 1 for January, 2 for February and so on
             _numberOfDays: function (year, month) {
                 return new Date(year, month, 0).getDate();
+            },
+
+            _showEvent: function (e) {
+                console.log(e.detail);
             }
         });
     </script>

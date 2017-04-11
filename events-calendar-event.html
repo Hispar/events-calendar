@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-styles/paper-styles.html">
+
+<dom-module id="events-calendar-event">
+    <template>
+        <div class$="chip [[status]]">
+            <!--<img src="img_avatar.jpg" alt="Person" width="96" height="96">-->
+            <p class="chip-text">[[text]]</p>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'events-calendar-event',
+
+            listeners: {
+                'tap': '_showEvent'
+            },
+
+            properties: {
+                text: {
+                    type: String
+                },
+                status: {
+                    type: String,
+                    value: ''
+                },
+                date: {
+                    type: String
+                },
+
+                slot: {
+                    type: String,
+                    value: '',
+                    observer: '_textChanged'
+                },
+                eventText: {
+                    type: String,
+                    value: '',
+                    observer: '_textChanged'
+                },
+                category: {
+                    type: String,
+                    value: '',
+                    observer: '_textChanged'
+                }
+            },
+
+            attached: function () {
+                this._textChanged();
+            },
+            _textChanged: function () {
+                var elements = [];
+                if (this.slot !== '' && this.slot !== undefined) {
+                    elements.push(this.slot);
+                }
+                if (this.eventText !== '' && this.eventText !== undefined) {
+                    elements.push(this.eventText);
+                }
+                if (this.category !== '' && this.category !== undefined) {
+                    elements.push(this.category);
+                }
+                if (elements.length > 0) {
+                    this.text = elements.join(' - ');
+                } else {
+                    this.text = '';
+                }
+            },
+            _showEvent: function (e) {
+                this.fire('showEvent',
+                    {
+                        "status": this.status,
+                        "date": this.date,
+                        "slot": this.slot,
+                        "eventText": this.eventText,
+                        "category": this.category
+                    }
+                );
+            }
+        });
+    </script>
+</dom-module>

@@ -1,32 +1,20 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../fa-awesome/fa-awesome.html">
 <link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="events-calendar-event.html">
 
 <dom-module id="events-calendar-day">
-    <style>
-        :host .pending{
-            background: orange;
-        }
-
-        :host .assigned{
-            background: greenyellow;
-        }
-
-        :host .events-cld-day {
-            margin: 0;
-            /*padding: 10px;*/
-            font-size: 16px;
-            border: 1px solid #f7f7f7;
-            cursor: pointer;
-            z-index: 5;
-            transition: all .3s ease-in-out
-        }
-    </style>
     <template>
         <h4 on-click="_onDayClicked">{{ day }}</h4>
-        <iron-collapse id="collapse" opened="[[open]]">
+        <iron-collapse class="event-collapse" id="collapse" opened="[[open]]">
             <template is="dom-repeat" items="[[eventList]]">
-                <p class$="[[_getAssigned(item)]]">{{ item.slot }} - {{ item.name }} - {{ item.category }}</p>
+                <events-calendar-event
+                    date="{{ date }}"
+                    slot="{{ item.slot }}"
+                    event-text="{{ item.name }}"
+                    category="{{ item.category }}"
+                    status="[[_getAssigned(item)]]"
+                ></events-calendar-event>
             </template>
         </iron-collapse>
     </template>
@@ -110,7 +98,7 @@
             },
 
             _getAssigned: function (item) {
-                if (item.name == '') {
+                if (item.name === '') {
                     return 'pending';
                 }
                 return 'assigned';

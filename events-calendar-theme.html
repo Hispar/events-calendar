@@ -4,11 +4,11 @@
             font-family: "Helvetica Neue", Helvetica;
             display: block;
             box-sizing: border-box;
-
             --white-color: #fff;
 
             --events-cld-header-bg: #f7f7f7;
-            --events-cld-header-color: #ff4a4f;
+            --events-cld-header-color: #2f537b;
+            --events-cld-hover-color: #a8bdd3;
 
             --events-cld-label-color: #757575;
 
@@ -83,30 +83,49 @@
             @apply(--events-labels);
         }
 
-        .events-cld-main { width: 100%; margin: 0; border: 1px solid #f7f7f7 }
+        .events-cld-main {
+            width: 100%;
+            margin: 0;
+            border: 1px solid #f7f7f7
+        }
 
         .calendar-icon-left,
-        .calendar-icon-right { width: 15px; vertical-align: middle }
+        .calendar-icon-right {
+            width: 15px;
+            vertical-align: middle
+        }
 
-        .calendar-icon-left { margin: 0 0 0 5px }
-        .calendar-icon-right { margin: 0 5px 0 0 }
+        .calendar-icon-left {
+            margin: 0 0 0 5px
+        }
+
+        .calendar-icon-right {
+            margin: 0 5px 0 0
+        }
 
         .calendar-icon-todayDate {
             width: 15px;
             vertical-align: sub
         }
 
-            .calendar-icon-left:hover,
-            .calendar-icon-right:hover,
-            .calendar-icon-todayDate:hover { cursor: pointer }
+        .calendar-icon-left:hover,
+        .calendar-icon-right:hover,
+        .calendar-icon-todayDate:hover {
+            cursor: pointer
+        }
 
-            .calendar-icon-left svg,
-            .calendar-icon-right svg,
-            .calendar-icon-todayDate svg { fill: var(--light-grey-color); transition: all .3s ease-in-out }
+        .calendar-icon-left svg,
+        .calendar-icon-right svg,
+        .calendar-icon-todayDate svg {
+            fill: var(--light-grey-color);
+            transition: all .3s ease-in-out
+        }
 
-                .calendar-icon-left:hover svg,
-                .calendar-icon-right:hover svg,
-                .calendar-icon-todayDate:hover svg { opacity: .8 }
+        .calendar-icon-left:hover svg,
+        .calendar-icon-right:hover svg,
+        .calendar-icon-todayDate:hover svg {
+            opacity: .8
+        }
 
         .events-cld-nav {
             position: relative;
@@ -115,13 +134,22 @@
             margin-top: 2px
         }
 
-        .events-cld-nav:hover { cursor: pointer }
+        .events-cld-nav:hover {
+            cursor: pointer
+        }
 
-        .events-cld-rwd { float: left }
+        .events-cld-rwd {
+            float: left
+        }
 
-        .events-cld-fwd { float: right }
+        .events-cld-fwd {
+            float: right
+        }
 
-        .events-cld-labels, .events-cld-days { margin: 0; padding-left: 0 }
+        .events-cld-labels, .events-cld-days {
+            margin: 0;
+            padding-left: 0
+        }
 
         ::content .events-cld-label {
             font-size: 16px;
@@ -132,7 +160,9 @@
             text-overflow: ellipsis;
         }
 
-            .events-cld-label:last-child { margin-right: 0 }
+        .events-cld-label:last-child {
+            margin-right: 0
+        }
 
         ::content .events-cld-label, ::content .events-cld-day {
             box-sizing: border-box;
@@ -153,6 +183,7 @@
             background: var(--events-cld-prev-days-bg);
             color: var(--events-cld-prev-days-color);
         }
+
         ::content .events-cld-day.currMonth {
             background: var(--white-color)
         }
@@ -161,43 +192,43 @@
             background: var(--events-cld-prev-days-bg)
         }
 
-            ::content .events-cld-day.prevMonth span, .events-cld-day.currMonth span,
-            ::content .events-cld-day.nextMonth span {
-                position: relative;
-                z-index: 10
-            }
+        ::content .events-cld-day.prevMonth span, .events-cld-day.currMonth span,
+        ::content .events-cld-day.nextMonth span {
+            position: relative;
+            z-index: 10
+        }
 
-        ::content .events-cld-day.prevMonth { opacity: .7 }
+        ::content .events-cld-day.prevMonth {
+            opacity: .7
+        }
 
-            ::content .events-cld-day.prevMonth:hover,
-            ::content .events-cld-day.currMonth:hover,
-            ::content .events-cld-day.nextMonth:hover {
-                cursor: pointer
-            }
+        ::content .events-cld-day.prevMonth:hover,
+        ::content .events-cld-day.currMonth:hover,
+        ::content .events-cld-day.nextMonth:hover {
+            cursor: pointer
+        }
 
-                ::content .events-cld-day.prevMonth::before,
-                ::content .events-cld-day.currMonth::before,
-                ::content .events-cld-day.nextMonth::before {
-                    content: '';
-                    width: 5px;
-                    height: 5px;
-                    background: transparent;
-                    margin-left: -2.5px;
-                    position: absolute;
-                    top: 30px;
-                    left: 50%;
-                    z-index: 0;
-                    border-radius: 50%;
-                    transition: all .5s ease-in-out
-                }
+        ::content .events-cld-day.prevMonth::before,
+        ::content .events-cld-day.currMonth::before,
+        ::content .events-cld-day.nextMonth::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: transparent;
+            margin-left: -2.5px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            z-index: 0;
+            border-radius: 50%;
+            transition: all .5s ease-in-out
+        }
 
-                ::content .events-cld-day.prevMonth:hover::before,
-                ::content .events-cld-day.currMonth:hover::before,
-                ::content .events-cld-day.nextMonth:hover::before {
-                    background: var(--events-cld-header-color)
-                }
+        ::content .events-cld-day:hover {
+            background: var(--events-cld-hover-color);
+        }
 
-         ::content .events-cld-day.today {
+        ::content .events-cld-day.today {
             border-bottom: 1px solid var(--events-cld-header-color);
             position: relative;
             z-index: 5
@@ -215,23 +246,23 @@
             /*box-shadow: inset 0px 0px 10px -2px rgba(0, 0, 0, .55)*/
         }
 
-            ::content .events-cld-day.currMonth.selected:hover {
-                opacity: .8
-            }
+        ::content .events-cld-day.currMonth.selected:hover {
+            opacity: .8
+        }
 
         ::content .events-cld-day.prevMonth.disabled {
             pointer-events: none;
         }
 
-            ::content .events-cld-day.prevMonth.disabled:hover {
-                background: var(--events-cld-prev-days-bg);
-                border-bottom: none;
-                cursor: default
-            }
+        ::content .events-cld-day.prevMonth.disabled:hover {
+            background: var(--events-cld-prev-days-bg);
+            border-bottom: none;
+            cursor: default
+        }
 
-                ::content .events-cld-day.disabled:hover::before {
-                    background: none
-                }
+        ::content .events-cld-day.disabled:hover::before {
+            background: none
+        }
 
         .events-cld-number {
             position: relative;
@@ -253,12 +284,15 @@
             font-size: 12px
         }
 
-        .events-cld-number:hover .events-cld-title { display: block }
+        .events-cld-number:hover .events-cld-title {
+            display: block
+        }
 
         .events-cld-title::before {
             content: '';
             position: absolute;
-            top: -7.5px; left: 10px;
+            top: -7.5px;
+            left: 10px;
             width: 0;
             height: 0;
             border-left: 7.5px solid transparent;
@@ -266,14 +300,69 @@
             border-bottom: 7.5px solid #ccc
         }
 
-        .events-cld-number.eventday { font-weight: bold; color: #0080FF }
+        .events-cld-number.eventday {
+            font-weight: bold;
+            color: #0080FF
+        }
 
-            .events-cld-number.eventday:hover { cursor: pointer; background: #eee }
+        .events-cld-number.eventday:hover {
+            cursor: pointer;
+            background: #eee
+        }
 
-            .today .events-cld-number.eventday:hover { background: #005eff }
+        .today .events-cld-number.eventday:hover {
+            background: #005eff
+        }
 
         ::content .events-cld-week {
             display: flex;
+        }
+
+        /* Main card */
+        ::content .card {
+            margin: 24px;
+            padding: 16px;
+            color: #757575;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Day */
+        ::content .event-collapse {
+            padding-bottom: 10%;
+        }
+
+        /* event */
+        ::content .events-calendar-day .chip {
+            display: inline-block;
+            padding: 0 25px;
+            height: 50px;
+            font-size: 16px;
+            line-height: 50px;
+            border-radius: 25px;
+            background-color: #f1f1f1;
+            overflow: hidden;
+        }
+
+        ::content .events-calendar-day .chip img {
+            float: left;
+            margin: 0 10px 0 -25px;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
+
+        ::content .events-calendar-day .chip-text {
+            margin: 0;
+        }
+
+        ::content .events-calendar-day .pending{
+            background: orange;
+        }
+
+        ::content .events-calendar-day .assigned{
+            background: greenyellow;
         }
     </style>
 </dom-module>
