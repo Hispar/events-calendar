@@ -5,14 +5,15 @@
 
 <dom-module id="events-calendar-day">
     <template>
-        <h4 on-click="_onDayClicked">{{ day }}</h4>
+        <h4>{{ day }}</h4>
         <iron-collapse class="event-collapse" id="collapse" opened="[[open]]">
             <template is="dom-repeat" items="[[eventList]]">
                 <events-calendar-event
                     date="{{ date }}"
                     slot="{{ item.slot }}"
-                    event-text="{{ item.name }}"
+                    event-data="{{ item.name }}"
                     category="{{ item.category }}"
+                    summary="{{ item.summary }}"
                     status="[[_getAssigned(item)]]"
                 ></events-calendar-event>
             </template>
@@ -69,6 +70,10 @@
                     value: false,
                     reflectToAttribute: true
                 }
+            },
+
+            listeners: {
+                'tap': '_onDayClicked'
             },
 
             _onOpen: function (newValue, oldValue) {

@@ -19,6 +19,10 @@
             --highlighted-day-color: #90dca7;
             --selected-date-color: #29a54f;
 
+            --event-status-pending-color: #ffd3af;
+            --event-status-assigned-color: #91d391;
+
+
             --layout: {
                 display: flex;
                 display: -ms-flexbox;
@@ -336,12 +340,11 @@
         /* event */
         ::content .events-calendar-day .chip {
             display: inline-block;
-            padding: 0 25px;
-            height: 50px;
-            font-size: 16px;
-            line-height: 50px;
+            padding: 0 15px;
+            height: 32px;
+            font-size: 14px;
+            line-height: 32px;
             border-radius: 25px;
-            background-color: #f1f1f1;
             overflow: hidden;
         }
 
@@ -358,11 +361,11 @@
         }
 
         ::content .events-calendar-day .pending{
-            background: orange;
+            background: var(--event-status-pending-color);
         }
 
         ::content .events-calendar-day .assigned{
-            background: greenyellow;
+            background: var(--event-status-assigned-color);
         }
     </style>
 </dom-module>

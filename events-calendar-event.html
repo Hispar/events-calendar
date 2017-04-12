@@ -1,12 +1,19 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../paper-card/paper.html">
 
 <dom-module id="events-calendar-event">
     <template>
+        <template is="dom-if" if="{{!opened}}">
         <div class$="chip [[status]]">
             <!--<img src="img_avatar.jpg" alt="Person" width="96" height="96">-->
-            <p class="chip-text">[[text]]</p>
+            <p class="chip-text">[[summary]]</p>
         </div>
+        </template>
+        <template is="dom-if" if="{{opened}}">
+            <div class$="opened-chip [[status]]">
+                wat
+            </div>
+        </template>
     </template>
 
     <script>
@@ -18,9 +25,6 @@
             },
 
             properties: {
-                text: {
-                    type: String
-                },
                 status: {
                     type: String,
                     value: ''
@@ -28,52 +32,39 @@
                 date: {
                     type: String
                 },
-
+                summary: {
+                    type: String,
+                    value: ''
+                },
                 slot: {
                     type: String,
-                    value: '',
-                    observer: '_textChanged'
+                    value: ''
                 },
-                eventText: {
+                eventData: {
                     type: String,
-                    value: '',
-                    observer: '_textChanged'
+                    value: ''
                 },
                 category: {
                     type: String,
-                    value: '',
-                    observer: '_textChanged'
-                }
-            },
-
-            attached: function () {
-                this._textChanged();
-            },
-            _textChanged: function () {
-                var elements = [];
-                if (this.slot !== '' && this.slot !== undefined) {
-                    elements.push(this.slot);
-                }
-                if (this.eventText !== '' && this.eventText !== undefined) {
-                    elements.push(this.eventText);
-                }
-                if (this.category !== '' && this.category !== undefined) {
-                    elements.push(this.category);
-                }
-                if (elements.length > 0) {
-                    this.text = elements.join(' - ');
-                } else {
-                    this.text = '';
+                    value: ''
+                },
+                opened: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
                 }
             },
             _showEvent: function (e) {
+                e.stopPropagation();
+                this.opened = !this.opened;
                 this.fire('showEvent',
                     {
                         "status": this.status,
                         "date": this.date,
                         "slot": this.slot,
-                        "eventText": this.eventText,
-                        "category": this.category
+                        "eventData": this.eventData,
+                        "category": this.category,
+                        "summary": this.summary
                     }
                 );
             }
