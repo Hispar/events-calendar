@@ -1,19 +1,23 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-card/paper.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <dom-module id="events-calendar-event">
     <template>
-        <template is="dom-if" if="{{!opened}}">
         <div class$="chip [[status]]">
             <!--<img src="img_avatar.jpg" alt="Person" width="96" height="96">-->
             <p class="chip-text">[[summary]]</p>
         </div>
-        </template>
-        <template is="dom-if" if="{{opened}}">
-            <div class$="opened-chip [[status]]">
-                wat
-            </div>
-        </template>
+        <paper-dialog opened="[[opened]]" id="dialogChip" on-iron-overlay-closed="_close">
+            <h2>Header</h2>
+            <p><span>Slot</span>:<span>{{ slot }}</span></p>
+            <p><span>Event Data</span>:<span>{{ eventData }}</span></p>
+            <p><span>Category</span>:<span>{{ category }}</span></p>
+            <!--<div class="buttons">-->
+                <!--<paper-button dialog-dismiss>Decline</paper-button>-->
+                <!--<paper-button dialog-confirm autofocus>Accept</paper-button>-->
+            <!--</div>-->
+        </paper-dialog>
     </template>
 
     <script>
@@ -50,8 +54,7 @@
                 },
                 opened: {
                     type: Boolean,
-                    value: false,
-                    reflectToAttribute: true
+                    value: false
                 }
             },
             _showEvent: function (e) {
@@ -67,6 +70,9 @@
                         "summary": this.summary
                     }
                 );
+            },
+            _close: function () {
+                this.opened = false;
             }
         });
     </script>

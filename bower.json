@@ -19,7 +19,8 @@
     "fa-awesome": "^2.0.1",
     "moment": "^2.17.1",
     "iron-collapse": "^v1.3.0",
-    "paper-styles": "^1.2.1"
+    "paper-dialog": "^1.1.0",
+    "paper-button": "^1.0.14"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
