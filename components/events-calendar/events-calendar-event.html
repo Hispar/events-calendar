@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-button/paper-button.html">
+
+<dom-module id="events-calendar-event">
+    <template>
+        <div class$="chip [[status]]">
+            <!--<img src="img_avatar.jpg" alt="Person" width="96" height="96">-->
+            <p class="chip-text">[[summary]]</p>
+        </div>
+        <paper-dialog opened="[[opened]]" id="dialogChip" on-iron-overlay-closed="_close">
+            <h2>{{ category }} - {{slot}}</h2>
+            <template is="dom-if" if="{{description}}">
+                <h3>{{ description }}</h3>
+            </template>
+            <template is="dom-if" if="{{!description}}">
+                <h3>No description available</h3>
+            </template>
+            <!--<div class="buttons">-->
+                <!--<paper-button dialog-dismiss>Decline</paper-button>-->
+                <!--<paper-button dialog-confirm autofocus>Accept</paper-button>-->
+            <!--</div>-->
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'events-calendar-event',
+
+            listeners: {
+                'tap': '_showEvent'
+            },
+
+            properties: {
+                status: {
+                    type: String,
+                    value: ''
+                },
+                date: {
+                    type: String
+                },
+                summary: {
+                    type: String,
+                    value: ''
+                },
+                slot: {
+                    type: String,
+                    value: ''
+                },
+                description: {
+                    type: String,
+                    value: ''
+                },
+                category: {
+                    type: String,
+                    value: ''
+                },
+                opened: {
+                    type: Boolean,
+                    value: false
+                }
+            },
+            _showEvent: function (e) {
+                e.stopPropagation();
+                this.opened = !this.opened;
+                this.fire('showEvent',
+                    {
+                        "status": this.status,
+                        "date": this.date,
+                        "slot": this.slot,
+                        "description": this.description,
+                        "category": this.category,
+                        "summary": this.summary
+                    }
+                );
+            },
+            _close: function () {
+                this.opened = false;
+            }
+        });
+    </script>
+</dom-module>

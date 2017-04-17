@@ -1,0 +1,375 @@
+<dom-module id="events-calendar-theme">
+    <style>
+        :root {
+            font-family: "Helvetica Neue", Helvetica;
+            display: block;
+            box-sizing: border-box;
+            --white-color: #fff;
+
+            --events-cld-header-bg: #f7f7f7;
+            --events-cld-header-color: #2f537b;
+            --events-cld-hover-color: #a8bdd3;
+
+            --events-cld-label-color: #757575;
+
+            --events-cld-prev-days-bg: #f1f1f1;
+            --events-cld-prev-days-color: #a0a0a0;
+
+            --light-grey-color: #797979;
+            --highlighted-day-color: #90dca7;
+            --selected-date-color: #29a54f;
+
+            --event-status-pending-color: #ffd3af;
+            --event-status-assigned-color: #91d391;
+
+
+            --layout: {
+                display: flex;
+                display: -ms-flexbox;
+                display: -webkit-flex
+            };
+
+            --layout-horizontal: {
+                @apply(--layout);
+
+                flex-direction: row;
+                -ms-flex-direction: row;
+                -webkit-flex-direction: row
+            };
+
+            --layout-justified: {
+                justify-content: space-between;
+                -ms-flex-pack: justify;
+                -webkit-justify-content: space-between
+            };
+
+            --no-selection: {
+                user-select: none;
+                -ms-user-select: none;
+                -moz-user-select: none;
+                -khtml-user-select: none;
+                -webkit-user-select: none;
+                -webkit-touch-callout: none
+            };
+        }
+
+        #content {
+            width: 100%;
+            margin: 20px 0;
+            background: var(--white-color);
+            border-radius: 4px
+        }
+
+        #header {
+            @apply(--no-selection);
+            margin: 0;
+            height: 45px;
+            line-height: 45px;
+            font-size: 17px;
+            font-weight: bold
+        }
+
+        #header > div {
+            @apply(--layout);
+            @apply(--layout-justified);
+            width: 100%;
+            color: var(--events-cld-header-color);
+            background: var(--events-cld-header-bg)
+        }
+
+        ::content .events-cld-labels {
+            min-width: 37.5px;
+            padding: 0;
+
+            @apply(--layout);
+            @apply(--week-layout);
+
+            @apply(--events-labels);
+        }
+
+        .events-cld-main {
+            width: 100%;
+            margin: 0;
+            border: 1px solid #f7f7f7
+        }
+
+        .calendar-icon-left,
+        .calendar-icon-right {
+            width: 15px;
+            vertical-align: middle
+        }
+
+        .calendar-icon-left {
+            margin: 0 0 0 5px
+        }
+
+        .calendar-icon-right {
+            margin: 0 5px 0 0
+        }
+
+        .calendar-icon-todayDate {
+            width: 15px;
+            vertical-align: sub
+        }
+
+        .calendar-icon-left:hover,
+        .calendar-icon-right:hover,
+        .calendar-icon-todayDate:hover {
+            cursor: pointer
+        }
+
+        .calendar-icon-left svg,
+        .calendar-icon-right svg,
+        .calendar-icon-todayDate svg {
+            fill: var(--light-grey-color);
+            transition: all .3s ease-in-out
+        }
+
+        .calendar-icon-left:hover svg,
+        .calendar-icon-right:hover svg,
+        .calendar-icon-todayDate:hover svg {
+            opacity: .8
+        }
+
+        .events-cld-nav {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            margin-top: 2px
+        }
+
+        .events-cld-nav:hover {
+            cursor: pointer
+        }
+
+        .events-cld-rwd {
+            float: left
+        }
+
+        .events-cld-fwd {
+            float: right
+        }
+
+        .events-cld-labels, .events-cld-days {
+            margin: 0;
+            padding-left: 0
+        }
+
+        ::content .events-cld-label {
+            font-size: 16px;
+            color: var(--events-cld-label-color);
+            line-height: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .events-cld-label:last-child {
+            margin-right: 0
+        }
+
+        ::content .events-cld-label, ::content .events-cld-day {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 14.28%;
+            text-align: center
+        }
+
+        ::content .events-cld-day.prevMonth,
+        ::content .events-cld-day.currMonth,
+        ::content .events-cld-day.nextMonth {
+            position: relative;
+            /*z-index: 10;*/
+            transition: background-color .5s ease-in-out
+        }
+
+        ::content .events-cld-day.prevMonth {
+            background: var(--events-cld-prev-days-bg);
+            color: var(--events-cld-prev-days-color);
+        }
+
+        ::content .events-cld-day.currMonth {
+            background: var(--white-color)
+        }
+
+        ::content .events-cld-day.nextMonth {
+            background: var(--events-cld-prev-days-bg)
+        }
+
+        ::content .events-cld-day.prevMonth span, .events-cld-day.currMonth span,
+        ::content .events-cld-day.nextMonth span {
+            position: relative;
+            z-index: 10
+        }
+
+        ::content .events-cld-day.prevMonth {
+            opacity: .7
+        }
+
+        ::content .events-cld-day.prevMonth:hover,
+        ::content .events-cld-day.currMonth:hover,
+        ::content .events-cld-day.nextMonth:hover {
+            cursor: pointer
+        }
+
+        ::content .events-cld-day.prevMonth::before,
+        ::content .events-cld-day.currMonth::before,
+        ::content .events-cld-day.nextMonth::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            background: transparent;
+            margin-left: -2.5px;
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            z-index: 0;
+            border-radius: 50%;
+            transition: all .5s ease-in-out
+        }
+
+        ::content .events-cld-day:hover {
+            background: var(--events-cld-hover-color);
+        }
+
+        ::content .events-cld-day.today {
+            border-bottom: 1px solid var(--events-cld-header-color);
+            position: relative;
+            z-index: 5
+        }
+
+        ::content .events-cld-day.currMonth.selected,
+        ::content .events-cld-day.nextMonth.selected {
+            background: var(--events-cld-header-color);
+            color: var(--white-color);
+            border: 1px solid #f1393e;
+            position: relative;
+            cursor: pointer;
+            z-index: 5;
+            transition: all .4s ease-in-out;
+            /*box-shadow: inset 0px 0px 10px -2px rgba(0, 0, 0, .55)*/
+        }
+
+        ::content .events-cld-day.currMonth.selected:hover {
+            opacity: .8
+        }
+
+        ::content .events-cld-day.prevMonth.disabled {
+            pointer-events: none;
+        }
+
+        ::content .events-cld-day.prevMonth.disabled:hover {
+            background: var(--events-cld-prev-days-bg);
+            border-bottom: none;
+            cursor: default
+        }
+
+        ::content .events-cld-day.disabled:hover::before {
+            background: none
+        }
+
+        .events-cld-number {
+            position: relative;
+            margin: 0;
+            padding: 10px
+        }
+
+        .events-cld-title {
+            position: absolute;
+            z-index: 5;
+            display: none;
+            top: 35px;
+            left: 0;
+            padding: 5px 10px;
+            background: var(--white-color);
+            white-space: nowrap;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px
+        }
+
+        .events-cld-number:hover .events-cld-title {
+            display: block
+        }
+
+        .events-cld-title::before {
+            content: '';
+            position: absolute;
+            top: -7.5px;
+            left: 10px;
+            width: 0;
+            height: 0;
+            border-left: 7.5px solid transparent;
+            border-right: 7.5px solid transparent;
+            border-bottom: 7.5px solid #ccc
+        }
+
+        .events-cld-number.eventday {
+            font-weight: bold;
+            color: #0080FF
+        }
+
+        .events-cld-number.eventday:hover {
+            cursor: pointer;
+            background: #eee
+        }
+
+        .today .events-cld-number.eventday:hover {
+            background: #005eff
+        }
+
+        ::content .events-cld-week {
+            display: flex;
+        }
+
+        /* Main card */
+        ::content .card {
+            margin: 24px;
+            padding: 16px;
+            color: #757575;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Day */
+        ::content events-calendar-day .event-collapse {
+            padding-bottom: 10%;
+        }
+
+        /* event */
+        ::content events-calendar-event .chip {
+            display: inline-block;
+            padding: 0 15px;
+            height: 32px;
+            font-size: 14px;
+            line-height: 32px;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        ::content events-calendar-event .chip img {
+            float: left;
+            margin: 0 10px 0 -25px;
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
+
+        ::content events-calendar-event .chip-text {
+            margin: 0;
+        }
+
+        ::content events-calendar-event .pending{
+            background: var(--event-status-pending-color);
+        }
+
+        ::content events-calendar-event .assigned{
+            background: var(--event-status-assigned-color);
+        }
+
+        ::content events-calendar-event paper-dialog {
+            min-height: 10em;
+        }
+    </style>
+</dom-module>

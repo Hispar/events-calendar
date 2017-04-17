@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <title>mp calendar</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../../events-calendar/events-calendar.html">
+    <style>
+        .card {
+            margin: 24px;
+            padding: 16px;
+            color: #757575;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+<!--<div class="card">-->
+<!--<events-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'-->
+<!--disable-prev-days-->
+<!--show-days-in-month=42>-->
+<!--</events-calendar>-->
+<!--</div>-->
+<template is="dom-bind">
+    <div class="card">
+        <events-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'
+                     disable-prev-days
+                     show-days-in-month=42
+        >
+        </events-calendar>
+    </div>
+
+    <script>
+
+        var calendar = document.querySelector('events-calendar');
+
+        calendar.eventList = {
+            '2017-04-01' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: 'test',
+                    category: 'Supervisor'
+                },
+                {
+                    summary: '11-15 | S',
+                    slot: '11:00-15:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+            '2017-04-02' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+            '2017-04-03' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+        };
+
+
+    </script>
+
+</template>
+
+
+</body>
+</html>
+</html>
