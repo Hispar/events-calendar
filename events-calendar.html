@@ -4,11 +4,49 @@
 <link rel="import" href="events-calendar-day.html">
 <!--
 
-    `events-calendar` is a simple Polymer element
+    `events-calendar` is a Polymer element
 
     ### Example
-
-        <events-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'></events-calendar>
+        <events-calendar day-labels='["Su","Mo","Tu","We","Th","Fr","Sa"]'
+                     disable-prev-days
+                     show-days-in-month=42
+        >
+        </events-calendar>
+        <script>
+        var calendar = document.querySelector('events-calendar');
+        calendar.eventList = {
+            '2017-04-01' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: 'test',
+                    category: 'Supervisor'
+                },
+                {
+                    summary: '11-15 | S',
+                    slot: '11:00-15:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+            '2017-04-02' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+            '2017-04-03' : [
+                {
+                    summary: '7-11 | S',
+                    slot: '7:00-11:00',
+                    name: '',
+                    category: 'Supervisor'
+                }
+            ],
+        };
+    </script>
 
     @demo demo/index.html
 -->
