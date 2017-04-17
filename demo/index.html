@@ -39,19 +39,24 @@
 
         var calendar = document.querySelector('events-calendar');
 
-//        console.log(app);
         calendar.eventList = {
             '2017-04-01' : [
                 {
-                    summary: '7-11 - S',
+                    summary: '7-11 | S',
                     slot: '7:00-11:00',
+                    name: 'test',
+                    category: 'Supervisor'
+                },
+                {
+                    summary: '11-15 | S',
+                    slot: '11:00-15:00',
                     name: '',
                     category: 'Supervisor'
                 }
             ],
             '2017-04-02' : [
                 {
-                    summary: '7-11 - S',
+                    summary: '7-11 | S',
                     slot: '7:00-11:00',
                     name: '',
                     category: 'Supervisor'
@@ -59,7 +64,7 @@
             ],
             '2017-04-03' : [
                 {
-                    summary: '7-11 - S',
+                    summary: '7-11 | S',
                     slot: '7:00-11:00',
                     name: '',
                     category: 'Supervisor'

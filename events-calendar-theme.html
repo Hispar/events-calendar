@@ -333,12 +333,12 @@
         }
 
         /* Day */
-        ::content .event-collapse {
+        ::content events-calendar-day .event-collapse {
             padding-bottom: 10%;
         }
 
         /* event */
-        ::content .events-calendar-day .chip {
+        ::content events-calendar-event .chip {
             display: inline-block;
             padding: 0 15px;
             height: 32px;
@@ -348,7 +348,7 @@
             overflow: hidden;
         }
 
-        ::content .events-calendar-day .chip img {
+        ::content events-calendar-event .chip img {
             float: left;
             margin: 0 10px 0 -25px;
             height: 50px;
@@ -356,16 +356,20 @@
             border-radius: 50%;
         }
 
-        ::content .events-calendar-day .chip-text {
+        ::content events-calendar-event .chip-text {
             margin: 0;
         }
 
-        ::content .events-calendar-day .pending{
+        ::content events-calendar-event .pending{
             background: var(--event-status-pending-color);
         }
 
-        ::content .events-calendar-day .assigned{
+        ::content events-calendar-event .assigned{
             background: var(--event-status-assigned-color);
+        }
+
+        ::content events-calendar-event paper-dialog {
+            min-height: 10em;
         }
     </style>
 </dom-module>

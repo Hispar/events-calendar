@@ -9,10 +9,13 @@
             <p class="chip-text">[[summary]]</p>
         </div>
         <paper-dialog opened="[[opened]]" id="dialogChip" on-iron-overlay-closed="_close">
-            <h2>Header</h2>
-            <p><span>Slot</span>:<span>{{ slot }}</span></p>
-            <p><span>Event Data</span>:<span>{{ eventData }}</span></p>
-            <p><span>Category</span>:<span>{{ category }}</span></p>
+            <h2>{{ category }} - {{slot}}</h2>
+            <template is="dom-if" if="{{description}}">
+                <h3>{{ description }}</h3>
+            </template>
+            <template is="dom-if" if="{{!description}}">
+                <h3>No description available</h3>
+            </template>
             <!--<div class="buttons">-->
                 <!--<paper-button dialog-dismiss>Decline</paper-button>-->
                 <!--<paper-button dialog-confirm autofocus>Accept</paper-button>-->
@@ -44,7 +47,7 @@
                     type: String,
                     value: ''
                 },
-                eventData: {
+                description: {
                     type: String,
                     value: ''
                 },
@@ -65,7 +68,7 @@
                         "status": this.status,
                         "date": this.date,
                         "slot": this.slot,
-                        "eventData": this.eventData,
+                        "description": this.description,
                         "category": this.category,
                         "summary": this.summary
                     }
