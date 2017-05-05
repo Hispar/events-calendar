@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/Hispar/events-calendar.svg?branch=master)](https://travis-ci.org/Hispar/events-calendar)
-<!-- [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/mpachnis/mp-calendar) -->
-
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/Hispar/events-calendar)
 
 ## &lt;events-calendar&gt;
 
