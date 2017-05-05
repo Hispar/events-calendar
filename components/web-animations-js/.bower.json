@@ -27,12 +27,12 @@
     "web-animations-next-lite.dev.html",
     "web-animations-next-lite.dev.js"
   ],
-  "version": "2.2.4",
-  "_release": "2.2.4",
+  "version": "2.2.5",
+  "_release": "2.2.5",
   "_resolution": {
     "type": "version",
-    "tag": "2.2.4",
-    "commit": "d96e2023c476cd2727a8d8af452ff624ea3f8b28"
+    "tag": "2.2.5",
+    "commit": "2720e1e5a1b42790613af461b62c4e238ae88d48"
   },
   "_source": "https://github.com/web-animations/web-animations-js.git",
   "_target": "^2.2.0",
