@@ -34,11 +34,11 @@
     "font-roboto": "^1.0.1"
   },
   "homepage": "https://github.com/hispar/events-calendar",
-  "_release": "8d6194f66f",
+  "_release": "676117dd2d",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "8d6194f66ff9e3f052b7fd6bb6badf02017f1e25"
+    "commit": "676117dd2d921b2c0ab819fa4898bde8f56763fc"
   },
   "_source": "https://github.com/hispar/events-calendar.git",
   "_target": "master",
