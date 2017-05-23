@@ -103,6 +103,12 @@
                     observer: "_handlerChosen"
                 },
 
+                // Choose to expand the calendar on initialisation
+                expanded: {
+                    type: Boolean,
+                    value: false
+                },
+
                 // Set the first day of the week: Sunday is 0, Monday is 1, etc.
                 firstDayOfWeek: {
                     type: Number,
@@ -390,6 +396,7 @@
 
                 for (var i = 0; i < self.showDaysInMonth; i++) {
                     var day = document.createElement('events-calendar-day');
+                    day.open = this.expanded
                     // separated into weeks
                     if (i % 7 === 0) {
                         var week = document.createElement('div');
