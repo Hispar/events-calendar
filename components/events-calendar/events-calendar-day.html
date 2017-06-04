@@ -5,7 +5,7 @@
 
 <dom-module id="events-calendar-day">
     <template>
-        <h4>{{ day }}</h4>
+        <h4>{{ day }} <template is="dom-if" if="[[_hasCounter(eventList)]]"><span class="dayscounter">([[_getCounter(eventList)]])</span></template></h4>
         <iron-collapse class="event-collapse" id="collapse" opened="[[open]]">
             <template is="dom-repeat" items="[[eventList]]">
                 <events-calendar-event
@@ -30,8 +30,6 @@
                 open: {
                     type: Boolean,
                     value: false
-//                    observer: '_onOpen',
-//                    reflectToAttribute: true
                 },
 
                 // Events list by day
@@ -51,6 +49,9 @@
                     reflectToAttribute: true
                 },
 
+                /**
+                 * Formatted date.
+                 */
                 formattedDate: {
                     type: String,
                     computed: '_getFormattedDate(date)'
@@ -74,11 +75,6 @@
 
             listeners: {
                 'tap': '_onDayClicked'
-            },
-
-            _onOpen: function (newValue, oldValue) {
-                console.log(newValue, oldValue);
-//                this.$.dayDetails.open = newValue;
             },
 
             _onDayClicked: function () {
@@ -107,6 +103,20 @@
                     return 'pending';
                 }
                 return 'assigned';
+            },
+
+            _hasCounter: function (eventList) {
+                if (!this.open && eventList.length > 0) {
+                    return true;
+                }
+                return false;
+            },
+
+            _getCounter: function (eventList) {
+                if (!this.open && eventList.length > 0) {
+                    return eventList.length;
+                }
+                return "";
             }
         });
     </script>

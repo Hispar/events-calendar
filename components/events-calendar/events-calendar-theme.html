@@ -22,6 +22,8 @@
             --event-status-pending-color: #ffd3af;
             --event-status-assigned-color: #91d391;
 
+            --event-day-counter-color: #89d3ea;
+
 
             --layout: {
                 display: flex;
@@ -370,6 +372,10 @@
 
         ::content events-calendar-event paper-dialog {
             min-height: 10em;
+        }
+
+        ::content events-calendar-day .dayscounter{
+            color: var(--event-day-counter-color);
         }
     </style>
 </dom-module>
