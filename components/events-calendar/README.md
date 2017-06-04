@@ -27,7 +27,7 @@ Events calendar based on https://github.com/mpachnis/mp-calendar
         var calendar = document.querySelector('events-calendar');
 
         calendar.eventList = {
-            '2017-05-01' : [
+            '2017-06-01' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -41,7 +41,7 @@ Events calendar based on https://github.com/mpachnis/mp-calendar
                     category: 'Supervisor'
                 }
             ],
-            '2017-05-02' : [
+            '2017-06-02' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -49,7 +49,7 @@ Events calendar based on https://github.com/mpachnis/mp-calendar
                     category: 'Supervisor'
                 }
             ],
-            '2017-05-03' : [
+            '2017-06-03' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -84,7 +84,7 @@ $ bower install events-calendar
         var calendar = document.querySelector('events-calendar');
 
         calendar.eventList = {
-            '2017-05-01' : [
+            '2017-06-01' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -98,7 +98,7 @@ $ bower install events-calendar
                     category: 'Supervisor'
                 }
             ],
-            '2017-05-02' : [
+            '2017-06-02' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -106,7 +106,7 @@ $ bower install events-calendar
                     category: 'Supervisor'
                 }
             ],
-            '2017-05-03' : [
+            '2017-06-03' : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
