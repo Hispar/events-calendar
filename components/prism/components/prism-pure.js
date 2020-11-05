@@ -1,7 +1,21 @@
 (function (Prism) {
+	// https://agraef.github.io/pure-docs/pure.html#lexical-matters
+
 	Prism.languages.pure = {
+		'comment': [
+			{
+				pattern: /(^|[^\\])\/\*[\s\S]*?\*\//,
+				lookbehind: true
+			},
+			{
+				pattern: /(^|[^\\:])\/\/.*/,
+				lookbehind: true
+			},
+			/#!.+/
+		],
 		'inline-lang': {
 			pattern: /%<[\s\S]+?%>/,
+			greedy: true,
 			inside: {
 				'lang': {
 					pattern: /(^%< *)-\*-.+?-\*-/,
@@ -14,18 +28,10 @@
 				}
 			}
 		},
-		'comment': [
-			{
-				pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
-				lookbehind: true
-			},
-			{
-				pattern: /(^|[^\\:])\/\/.*/,
-				lookbehind: true
-			},
-			/#!.+/
-		],
-		'string': /"(?:\\.|[^"\\\r\n])*"/,
+		'string': {
+			pattern: /"(?:\\.|[^"\\\r\n])*"/,
+			greedy: true
+		},
 		'number': {
 			// The look-behind prevents wrong highlighting of the .. operator
 			pattern: /((?:\.\.)?)(?:\b(?:inf|nan)\b|\b0x[\da-f]+|(?:\b(?:0b)?\d+(?:\.\d)?|\B\.\d)\d*(?:e[+-]?\d+)?L?)/i,
@@ -38,7 +44,7 @@
 			alias: 'builtin'
 		},
 		// Any combination of operator chars can be an operator
-		'operator': /(?=\b_|[^_])[!"#$%&'*+,\-.\/:<=>?@\\^_`|~\u00a1-\u00bf\u00d7-\u00f7\u20d0-\u2bff]+|\b(?:and|div|mod|not|or)\b/,
+		'operator': /(?:[!"#$%&'*+,\-.\/:<=>?@\\^`|~\u00a1-\u00bf\u00d7-\u00f7\u20d0-\u2bff]|\b_+\b)+|\b(?:and|div|mod|not|or)\b/,
 		// FIXME: How can we prevent | and , to be highlighted as operator when they are used alone?
 		'punctuation': /[(){}\[\];,|]/
 	};
@@ -46,11 +52,9 @@
 	var inlineLanguages = [
 		'c',
 		{ lang: 'c++', alias: 'cpp' },
-		'fortran',
-		'ats',
-		'dsp'
+		'fortran'
 	];
-	var inlineLanguageRe = '%< *-\\*- *{lang}\\d* *-\\*-[\\s\\S]+?%>';
+	var inlineLanguageRe = /%< *-\*- *{lang}\d* *-\*-[\s\S]+?%>/.source;
 
 	inlineLanguages.forEach(function (lang) {
 		var alias = lang;

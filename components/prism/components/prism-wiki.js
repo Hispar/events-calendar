@@ -1,6 +1,6 @@
 Prism.languages.wiki = Prism.languages.extend('markup', {
 	'block-comment': {
-		pattern: /(^|[^\\])\/\*[\w\W]*?\*\//,
+		pattern: /(^|[^\\])\/\*[\s\S]*?\*\//,
 		lookbehind: true,
 		alias: 'comment'
 	},
@@ -15,9 +15,10 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 		// TODO Multi-line
 		pattern: /('{2,5}).+?\1/,
 		inside: {
-			'bold italic': {
+			'bold-italic': {
 				pattern: /(''''').+?(?=\1)/,
-				lookbehind: true
+				lookbehind: true,
+				alias: ['bold', 'italic']
 			},
 			'bold': {
 				pattern: /(''')[^'](?:.*?[^'])?(?=\1)/,
@@ -43,7 +44,7 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 		// FIXME Nested structures should be handled
 		// {{formatnum:{{#expr:{{{3}}}}}}}
 		/\{{3}.+?\}{3}/,
-		/\{\{.+?}}/
+		/\{\{.+?\}\}/
 	],
 	'symbol': [
 		/^#redirect/im,
@@ -70,10 +71,10 @@ Prism.languages.wiki = Prism.languages.extend('markup', {
 Prism.languages.insertBefore('wiki', 'tag', {
 	// Prevent highlighting inside <nowiki>, <source> and <pre> tags
 	'nowiki': {
-		pattern: /<(nowiki|pre|source)\b[\w\W]*?>[\w\W]*?<\/\1>/i,
+		pattern: /<(nowiki|pre|source)\b[\s\S]*?>[\s\S]*?<\/\1>/i,
 		inside: {
 			'tag': {
-				pattern: /<(?:nowiki|pre|source)\b[\w\W]*?>|<\/(?:nowiki|pre|source)>/i,
+				pattern: /<(?:nowiki|pre|source)\b[\s\S]*?>|<\/(?:nowiki|pre|source)>/i,
 				inside: Prism.languages.markup['tag'].inside
 			}
 		}

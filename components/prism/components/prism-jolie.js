@@ -1,18 +1,17 @@
 Prism.languages.jolie = Prism.languages.extend('clike', {
-	'keyword': /\b(?:include|define|is_defined|undef|main|init|outputPort|inputPort|Location|Protocol|Interfaces|RequestResponse|OneWay|type|interface|extender|throws|cset|csets|forward|Aggregates|Redirects|embedded|courier|extender|execution|sequential|concurrent|single|scope|install|throw|comp|cH|default|global|linkIn|linkOut|synchronized|this|new|for|if|else|while|in|Jolie|Java|Javascript|nullProcess|spawn|constants|with|provide|until|exit|foreach|instanceof|over|service)\b/g,
+	'keyword': /\b(?:include|define|is_defined|undef|main|init|outputPort|inputPort|Location|Protocol|Interfaces|RequestResponse|OneWay|type|interface|extender|throws|cset|csets|forward|Aggregates|Redirects|embedded|courier|execution|sequential|concurrent|single|scope|install|throw|comp|cH|default|global|linkIn|linkOut|synchronized|this|new|for|if|else|while|in|Jolie|Java|Javascript|nullProcess|spawn|constants|with|provide|until|exit|foreach|instanceof|over|service)\b/,
 	'builtin': /\b(?:undefined|string|int|void|long|Byte|bool|double|float|char|any)\b/,
-	'number': /\b\d*\.?\d+(?:e[+-]?\d+)?l?\b/i,
-	'operator': /->|<<|[!+-<>=*]?=|[:<>!?*\/%^]|&&|\|\||--?|\+\+?/g,
+	'number': /(?:\b\d+\.?\d*|\B\.\d+)(?:e[+-]?\d+)?l?/i,
+	'operator': /-[-=>]?|\+[+=]?|<[<=]?|[>=*!]=?|&&|\|\||[:?\/%^]/,
 	'symbol': /[|;@]/,
 	'punctuation': /[,.]/,
 	'string': {
-		pattern: /(["'])(\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
+		pattern: /(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
 		greedy: true
-	},
+	}
 });
 
 delete Prism.languages.jolie['class-name'];
-delete Prism.languages.jolie['function'];
 
 Prism.languages.insertBefore( 'jolie', 'keyword', {
 	'function':
@@ -24,7 +23,7 @@ Prism.languages.insertBefore( 'jolie', 'keyword', {
 		pattern: /(\bAggregates\s*:\s*)(?:\w+(?:\s+with\s+\w+)?\s*,\s*)*\w+(?:\s+with\s+\w+)?/,
 		lookbehind: true,
 		inside: {
-			'withExtension': {
+			'with-extension': {
 				pattern: /\bwith\s+\w+/,
 				inside: {
 					'keyword' : /\bwith\b/
@@ -46,10 +45,10 @@ Prism.languages.insertBefore( 'jolie', 'keyword', {
 				pattern: /,/
 			},
 			'function': {
-				pattern: /\w+/g
+				pattern: /\w+/
 			},
 			'symbol': {
-				pattern: /=>/g
+				pattern: /=>/
 			}
 		}
 	}

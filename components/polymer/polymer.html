@@ -162,6 +162,11 @@ i++;
 }
 }
 },
+_select$Attr: function () {
+var div = document.createElement('div');
+div.innerHTML = '<div select$>';
+return div.childNodes[0].attributes.getNamedItem('select$');
+}(),
 _replaceSlotWithContent: function (slot) {
 var content = slot.ownerDocument.createElement('content');
 while (slot.firstChild) {
@@ -169,12 +174,17 @@ content.appendChild(slot.firstChild);
 }
 var attrs = slot.attributes;
 for (var i = 0; i < attrs.length; i++) {
-var attr = attrs[i];
-content.setAttribute(attr.name, attr.value);
+content.attributes.setNamedItem(attrs[i].cloneNode());
 }
 var name = slot.getAttribute('name');
 if (name) {
 content.setAttribute('select', '[slot=\'' + name + '\']');
+}
+var name$Value = slot.getAttribute('name$');
+if (name$Value) {
+var select$Attr = this._select$Attr.cloneNode();
+select$Attr.value = '[slot=\'' + name$Value + '\']';
+content.attributes.setNamedItem(select$Attr);
 }
 slot.parentNode.replaceChild(content, slot);
 return content;
@@ -379,7 +389,7 @@ this._marshalAnnotatedListeners();
 }
 },
 _configureAnnotationReferences: function () {
-var notes = this._notes;
+var notes = this._notes || [];
 var nodes = this._nodes;
 for (var i = 0; i < notes.length; i++) {
 var note = notes[i];
@@ -556,6 +566,9 @@ return new MouseEvent('test', { buttons: 1 }).buttons === 1;
 return false;
 }
 }();
+function isMouseEvent(name) {
+return MOUSE_EVENTS.indexOf(name) > -1;
+}
 var SUPPORTS_PASSIVE = false;
 (function () {
 try {
@@ -569,6 +582,14 @@ window.removeEventListener('test', null, opts);
 } catch (e) {
 }
 }());
+function PASSIVE_TOUCH(eventName) {
+if (isMouseEvent(eventName) || eventName === 'touchend') {
+return;
+}
+if (HAS_NATIVE_TA && SUPPORTS_PASSIVE && Polymer.Settings.passiveTouchGestures) {
+return { passive: true };
+}
+}
 var IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/);
 var mouseCanceller = function (mouseEvent) {
 var sc = mouseEvent.sourceCapabilities;
@@ -578,9 +599,11 @@ return;
 mouseEvent[HANDLED_OBJ] = { skip: true };
 if (mouseEvent.type === 'click') {
 var path = Polymer.dom(mouseEvent).path;
+if (path) {
 for (var i = 0; i < path.length; i++) {
 if (path[i] === POINTERSTATE.mouse.target) {
 return;
+}
 }
 }
 mouseEvent.preventDefault();
@@ -612,7 +635,7 @@ POINTERSTATE.mouse.mouseIgnoreJob = Polymer.Debounce(POINTERSTATE.mouse.mouseIgn
 }
 function hasLeftMouseButton(ev) {
 var type = ev.type;
-if (MOUSE_EVENTS.indexOf(type) === -1) {
+if (!isMouseEvent(type)) {
 return false;
 }
 if (type === 'mousemove') {
@@ -682,7 +705,11 @@ deepTargetFind: function (x, y) {
 var node = document.elementFromPoint(x, y);
 var next = node;
 while (next && next.shadowRoot) {
+var oldNext = next;
 next = next.shadowRoot.elementFromPoint(x, y);
+if (oldNext === next) {
+break;
+}
 if (next) {
 node = next;
 }
@@ -789,7 +816,7 @@ node[GESTURE_KEY] = gobj = {};
 }
 for (var i = 0, dep, gd; i < deps.length; i++) {
 dep = deps[i];
-if (IS_TOUCH_ONLY && MOUSE_EVENTS.indexOf(dep) > -1 && dep !== 'click') {
+if (IS_TOUCH_ONLY && isMouseEvent(dep) && dep !== 'click') {
 continue;
 }
 gd = gobj[dep];
@@ -797,7 +824,7 @@ if (!gd) {
 gobj[dep] = gd = { _count: 0 };
 }
 if (gd._count === 0) {
-node.addEventListener(dep, this.handleNative);
+node.addEventListener(dep, this.handleNative, PASSIVE_TOUCH(dep));
 }
 gd[name] = (gd[name] || 0) + 1;
 gd._count = (gd._count || 0) + 1;
@@ -821,7 +848,7 @@ if (gd && gd[name]) {
 gd[name] = (gd[name] || 1) - 1;
 gd._count = (gd._count || 1) - 1;
 if (gd._count === 0) {
-node.removeEventListener(dep, this.handleNative);
+node.removeEventListener(dep, this.handleNative, PASSIVE_TOUCH(dep));
 }
 }
 }
@@ -2531,6 +2558,8 @@ AT_START: '@'
 }();Polymer.StyleUtil = function () {
 var settings = Polymer.Settings;
 return {
+unscopedStyleImports: new WeakMap(),
+SHADY_UNSCOPED_ATTR: 'shady-unscoped',
 NATIVE_VARIABLES: Polymer.Settings.useNativeCSSProperties,
 MODULE_STYLES_SELECTOR: 'style, link[rel=import][type~=css], template',
 INCLUDE_ATTR: 'include',
@@ -2638,7 +2667,7 @@ this.__lastHeadApplyNode = placeHolder;
 return placeHolder;
 },
 cssFromModules: function (moduleIds, warnIfNotFound) {
-var modules = moduleIds.trim().split(' ');
+var modules = moduleIds.trim().split(/\s+/);
 var cssText = '';
 for (var i = 0; i < modules.length; i++) {
 cssText += this.cssFromModule(modules[i], warnIfNotFound);
@@ -2673,9 +2702,26 @@ cssText += this.cssFromModules(include, true);
 }
 e = e.__appliedElement || e;
 e.parentNode.removeChild(e);
-cssText += this.resolveCss(e.textContent, element.ownerDocument);
+var css = this.resolveCss(e.textContent, element.ownerDocument);
+if (!settings.useNativeShadow && e.hasAttribute(this.SHADY_UNSCOPED_ATTR)) {
+e.textContent = css;
+document.head.insertBefore(e, document.head.firstChild);
+} else {
+cssText += css;
+}
 } else if (e.import && e.import.body) {
-cssText += this.resolveCss(e.import.body.textContent, e.import);
+var importCss = this.resolveCss(e.import.body.textContent, e.import);
+if (!settings.useNativeShadow && e.hasAttribute(this.SHADY_UNSCOPED_ATTR)) {
+if (!this.unscopedStyleImports.has(e.import)) {
+this.unscopedStyleImports.set(e.import, true);
+var importStyle = document.createElement('style');
+importStyle.setAttribute(this.SHADY_UNSCOPED_ATTR, '');
+importStyle.textContent = importCss;
+document.head.insertBefore(importStyle, document.head.firstChild);
+}
+} else {
+cssText += importCss;
+}
 }
 }
 }
@@ -2829,6 +2875,7 @@ var self = this;
 cb = function (rule) {
 rule.selector = self._slottedToContent(rule.selector);
 rule.selector = rule.selector.replace(ROOT, ':host > *');
+rule.selector = self._dirShadowTransform(rule.selector);
 if (callback) {
 callback(rule);
 }
@@ -2870,8 +2917,31 @@ this._transformRule(rule, this._transformComplexSelector, scope, hostScope);
 _transformRule: function (rule, transformer, scope, hostScope) {
 rule.selector = rule.transformedSelector = this._transformRuleCss(rule, transformer, scope, hostScope);
 },
+_splitSelectorList: function (selector) {
+var parts = [];
+var part = '';
+for (var i = 0; i >= 0 && i < selector.length; i++) {
+if (selector[i] === '(') {
+var end = styleUtil._findMatchingParen(selector, i);
+part += selector.slice(i, end + 1);
+i = end;
+} else if (selector[i] === COMPLEX_SELECTOR_SEP) {
+parts.push(part);
+part = '';
+} else {
+part += selector[i];
+}
+}
+if (part) {
+parts.push(part);
+}
+if (parts.length === 0) {
+parts.push(selector);
+}
+return parts;
+},
 _transformRuleCss: function (rule, transformer, scope, hostScope) {
-var p$ = rule.selector.split(COMPLEX_SELECTOR_SEP);
+var p$ = this._splitSelectorList(rule.selector);
 if (!styleUtil.isKeyframesSelector(rule)) {
 for (var i = 0, l = p$.length, p; i < l && (p = p$[i]); i++) {
 p$[i] = transformer.call(this, p, scope, hostScope);
@@ -2879,19 +2949,36 @@ p$[i] = transformer.call(this, p, scope, hostScope);
 }
 return p$.join(COMPLEX_SELECTOR_SEP);
 },
+_ensureScopedDir: function (s) {
+var m = s.match(DIR_PAREN);
+if (m && m[1] === '' && m[0].length === s.length) {
+s = '*' + s;
+}
+return s;
+},
+_additionalDirSelectors: function (dir, after, prefix) {
+if (!dir || !after) {
+return '';
+}
+prefix = prefix || '';
+return COMPLEX_SELECTOR_SEP + prefix + ' ' + dir + ' ' + after;
+},
 _transformComplexSelector: function (selector, scope, hostScope) {
 var stop = false;
 var hostContext = false;
+var dir = false;
 var self = this;
 selector = selector.trim();
 selector = this._slottedToContent(selector);
 selector = selector.replace(ROOT, ':host > *');
 selector = selector.replace(CONTENT_START, HOST + ' $1');
+selector = this._ensureScopedDir(selector);
 selector = selector.replace(SIMPLE_SELECTOR_SEP, function (m, c, s) {
 if (!stop) {
 var info = self._transformCompoundSelector(s, c, scope, hostScope);
 stop = stop || info.stop;
 hostContext = hostContext || info.hostContext;
+dir = dir || info.dir;
 c = info.combinator;
 s = info.value;
 } else {
@@ -2901,14 +2988,28 @@ return c + s;
 });
 if (hostContext) {
 selector = selector.replace(HOST_CONTEXT_PAREN, function (m, pre, paren, post) {
-return pre + paren + ' ' + hostScope + post + COMPLEX_SELECTOR_SEP + ' ' + pre + hostScope + paren + post;
+var replacement = pre + paren + ' ' + hostScope + post + COMPLEX_SELECTOR_SEP + ' ' + pre + hostScope + paren + post;
+if (dir) {
+replacement += self._additionalDirSelectors(paren, post, hostScope);
+}
+return replacement;
 });
 }
 return selector;
 },
+_transformDir: function (s) {
+s = s.replace(HOST_DIR, HOST_DIR_REPLACE);
+s = s.replace(DIR_PAREN, DIR_REPLACE);
+return s;
+},
 _transformCompoundSelector: function (selector, combinator, scope, hostScope) {
 var jumpIndex = selector.search(SCOPE_JUMP);
 var hostContext = false;
+var dir = false;
+if (selector.match(DIR_PAREN)) {
+selector = this._transformDir(selector);
+dir = true;
+}
 if (selector.indexOf(HOST_CONTEXT) >= 0) {
 hostContext = true;
 } else if (selector.indexOf(HOST) >= 0) {
@@ -2928,7 +3029,8 @@ return {
 value: selector,
 combinator: combinator,
 stop: stop,
-hostContext: hostContext
+hostContext: hostContext,
+dir: dir
 };
 },
 _transformSimpleSelector: function (selector, scope) {
@@ -2965,12 +3067,31 @@ this._transformRule(rule, this._transformDocumentSelector);
 },
 normalizeRootSelector: function (rule) {
 rule.selector = rule.selector.replace(ROOT, 'html');
+var parts = this._splitSelectorList(rule.selector);
+parts = parts.filter(function (part) {
+return !part.match(HOST_OR_HOST_GT_STAR);
+});
+rule.selector = parts.join(COMPLEX_SELECTOR_SEP);
 },
 _transformDocumentSelector: function (selector) {
-return selector.match(SCOPE_JUMP) ? this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR) : this._transformSimpleSelector(selector.trim(), SCOPE_DOC_SELECTOR);
+return this._transformComplexSelector(selector, SCOPE_DOC_SELECTOR);
 },
 _slottedToContent: function (cssText) {
 return cssText.replace(SLOTTED_PAREN, CONTENT + '> $1');
+},
+_dirShadowTransform: function (selector) {
+if (!selector.match(/:dir\(/)) {
+return selector;
+}
+return this._splitSelectorList(selector).map(function (s) {
+s = this._ensureScopedDir(s);
+s = this._transformDir(s);
+var m = HOST_CONTEXT_PAREN.exec(s);
+if (m) {
+s += this._additionalDirSelectors(m[2], m[3], '');
+}
+return s;
+}, this).join(COMPLEX_SELECTOR_SEP);
 },
 SCOPE_NAME: 'style-scope'
 };
@@ -2994,6 +3115,11 @@ var CLASS = 'class';
 var CONTENT_START = new RegExp('^(' + CONTENT + ')');
 var SELECTOR_NO_MATCH = 'should_not_match';
 var SLOTTED_PAREN = /(?:::slotted)(?:\(((?:\([^)(]*\)|[^)(]*)+?)\))/g;
+var HOST_OR_HOST_GT_STAR = /:host(?:\s*>\s*\*)?/;
+var DIR_PAREN = /(.*):dir\((ltr|rtl)\)/;
+var DIR_REPLACE = ':host-context([dir="$2"]) $1';
+var HOST_DIR = /:host\(:dir\((rtl|ltr)\)\)/g;
+var HOST_DIR_REPLACE = ':host-context([dir="$1"])';
 return api;
 }();Polymer.StyleExtends = function () {
 var styleUtil = Polymer.StyleUtil;
@@ -3669,18 +3795,23 @@ return cssText.replace(keyframesRule.keyframesNameRx, keyframesRule.transformedK
 };
 },
 _scopeKeyframes: function (rule, scopeId) {
-rule.keyframesNameRx = new RegExp(rule.keyframesName, 'g');
+rule.keyframesNameRx = new RegExp('\\b' + rule.keyframesName + '(?!\\B|-)', 'g');
 rule.transformedKeyframesName = rule.keyframesName + '-' + scopeId;
 rule.transformedSelector = rule.transformedSelector || rule.selector;
 rule.selector = rule.transformedSelector.replace(rule.keyframesName, rule.transformedKeyframesName);
 },
+_hasDirOrHostContext: function (parsedSelector) {
+return /:host-context|:dir/.test(parsedSelector);
+},
 _scopeSelector: function (rule, hostRx, hostSelector, viaAttr, scopeId) {
 rule.transformedSelector = rule.transformedSelector || rule.selector;
 var selector = rule.transformedSelector;
-var scope = viaAttr ? '[' + styleTransformer.SCOPE_NAME + '~=' + scopeId + ']' : '.' + scopeId;
+var scope = styleTransformer._calcElementScope(scopeId, viaAttr);
+var hostScope = styleTransformer._calcElementScope(hostSelector, viaAttr);
 var parts = selector.split(',');
+var isDirOrHostContextSelector = this._hasDirOrHostContext(rule.parsedSelector);
 for (var i = 0, l = parts.length, p; i < l && (p = parts[i]); i++) {
-parts[i] = p.match(hostRx) ? p.replace(hostSelector, scope) : scope + ' ' + p;
+parts[i] = p.match(hostRx) ? p.replace(hostSelector, scope) : isDirOrHostContextSelector ? p.replace(hostScope, scope + ' ' + hostScope) : scope + ' ' + p;
 }
 rule.selector = parts.join(',');
 },
@@ -4130,6 +4261,9 @@ this.__cssBuild = styleUtil.getCssBuildType(this);
 if (this.__appliedElement !== this) {
 this.__appliedElement.__cssBuild = this.__cssBuild;
 }
+if (this.ownerDocument !== window.document && this.__appliedElement === this) {
+document.head.appendChild(this);
+}
 this._tryApply();
 },
 attached: function () {
@@ -4226,6 +4360,9 @@ properties: { __hideTemplateChildren__: { observer: '_showHideChildren' } },
 _instanceProps: Polymer.nob,
 _parentPropPrefix: '_parent_',
 templatize: function (template) {
+if (Polymer.Settings.strictTemplatePolicy && !this._getRootDataHost()) {
+throw new Error('strictTemplatePolicy: template owner not trusted');
+}
 this._templatized = template;
 if (!template._content) {
 template._content = template.content;
@@ -4307,8 +4444,8 @@ archetype._addPropertyEffect(prop, 'function', this._createInstancePropEffector(
 }
 },
 _customPrepAnnotations: function (archetype, template) {
-archetype._template = template;
-var c = template._content;
+var t = archetype._template = document.createElement('template');
+var c = t._content = template._content;
 if (!c._notes) {
 var rootDataHost = archetype._rootDataHost;
 if (rootDataHost) {
@@ -4825,6 +4962,9 @@ this._debounceTemplate(this._render);
 this._flushTemplates();
 },
 _render: function () {
+if (!this.ctor) {
+return;
+}
 if (this._needFullRefresh) {
 this._applyFullRefresh();
 this._needFullRefresh = false;
@@ -5306,8 +5446,10 @@ if (this._instance) {
 var c$ = this._instance._children;
 if (c$ && c$.length) {
 var parent = Polymer.dom(Polymer.dom(c$[0]).parentNode);
+if (parent) {
 for (var i = 0, n; i < c$.length && (n = c$[i]); i++) {
 parent.removeChild(n);
+}
 }
 }
 this._instance = null;
@@ -5335,6 +5477,9 @@ properties: { notifyDomChange: { type: Boolean } },
 extends: 'template',
 _template: null,
 created: function () {
+if (Polymer.Settings.strictTemplatePolicy) {
+throw new Error('strictTemplatePolicy: dom-bind not allowed');
+}
 var self = this;
 Polymer.RenderStatus.whenReady(function () {
 if (document.readyState == 'loading') {

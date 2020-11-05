@@ -1,30 +1,30 @@
 Prism.languages.elixir = {
-	// Negative look-ahead is needed for string interpolation
-	// Negative look-behind is needed to avoid highlighting markdown headers in
-	// multi-line doc strings
-	'comment': {
-		pattern: /(^|[^#])#(?![{#]).*/m,
-		lookbehind: true
+	'comment': /#.*/m,
+	// ~r"""foo""" (multi-line), ~r'''foo''' (multi-line), ~r/foo/, ~r|foo|, ~r"foo", ~r'foo', ~r(foo), ~r[foo], ~r{foo}, ~r<foo>
+	'regex': {
+		pattern: /~[rR](?:("""|''')(?:\\[\s\S]|(?!\1)[^\\])+\1|([\/|"'])(?:\\.|(?!\2)[^\\\r\n])+\2|\((?:\\.|[^\\)\r\n])+\)|\[(?:\\.|[^\\\]\r\n])+\]|\{(?:\\.|[^\\}\r\n])+\}|<(?:\\.|[^\\>\r\n])+>)[uismxfr]*/,
+		greedy: true
 	},
-	// ~r"""foo""", ~r'''foo''', ~r/foo/, ~r|foo|, ~r"foo", ~r'foo', ~r(foo), ~r[foo], ~r{foo}, ~r<foo>
-	'regex': /~[rR](?:("""|'''|[\/|"'])(?:\\.|(?!\1)[^\\])+\1|\((?:\\\)|[^)])+\)|\[(?:\\\]|[^\]])+\]|\{(?:\\\}|[^}])+\}|<(?:\\>|[^>])+>)[uismxfr]*/,
 	'string': [
 		{
-			// ~s"""foo""", ~s'''foo''', ~s/foo/, ~s|foo|, ~s"foo", ~s'foo', ~s(foo), ~s[foo], ~s{foo}, ~s<foo>
-			pattern: /~[cCsSwW](?:("""|'''|[\/|"'])(?:\\.|(?!\1)[^\\])+\1|\((?:\\\)|[^)])+\)|\[(?:\\\]|[^\]])+\]|\{(?:\\\}|#\{[^}]+\}|[^}])+\}|<(?:\\>|[^>])+>)[csa]?/,
+			// ~s"""foo""" (multi-line), ~s'''foo''' (multi-line), ~s/foo/, ~s|foo|, ~s"foo", ~s'foo', ~s(foo), ~s[foo], ~s{foo} (with interpolation care), ~s<foo>
+			pattern: /~[cCsSwW](?:("""|''')(?:\\[\s\S]|(?!\1)[^\\])+\1|([\/|"'])(?:\\.|(?!\2)[^\\\r\n])+\2|\((?:\\.|[^\\)\r\n])+\)|\[(?:\\.|[^\\\]\r\n])+\]|\{(?:\\.|#\{[^}]+\}|#(?!\{)|[^#\\}\r\n])+\}|<(?:\\.|[^\\>\r\n])+>)[csa]?/,
+			greedy: true,
 			inside: {
 				// See interpolation below
 			}
 		},
 		{
 			pattern: /("""|''')[\s\S]*?\1/,
+			greedy: true,
 			inside: {
 				// See interpolation below
 			}
 		},
 		{
 			// Multi-line strings are allowed
-			pattern: /("|')(?:\\[\s\S]|(?!\1)[^\\])*\1/,
+			pattern: /("|')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,
+			greedy: true,
 			inside: {
 				// See interpolation below
 			}
@@ -37,7 +37,7 @@ Prism.languages.elixir = {
 		alias: 'symbol'
 	},
 	// Look-ahead prevents bad highlighting of the :: operator
-	'attr-name': /\w+:(?!:)/,
+	'attr-name': /\w+\??:(?!:)/,
 	'capture': {
 		// Look-behind prevents bad highlighting of the && operator
 		pattern: /(^|[^&])&(?:[^&\s\d()][^\s()]*|(?=\())/,
@@ -51,7 +51,7 @@ Prism.languages.elixir = {
 		alias: 'variable'
 	},
 	'attribute': {
-		pattern: /@[\S]+/,
+		pattern: /@\w+/,
 		alias: 'variable'
 	},
 	'number': /\b(?:0[box][a-f\d_]+|\d[\d_]*)(?:\.[\d_]+)?(?:e[+-]?[\d_]+)?\b/i,
@@ -82,9 +82,8 @@ Prism.languages.elixir.string.forEach(function(o) {
 					pattern: /^#\{|\}$/,
 					alias: 'punctuation'
 				},
-				rest: Prism.util.clone(Prism.languages.elixir)
+				rest: Prism.languages.elixir
 			}
 		}
 	};
 });
-

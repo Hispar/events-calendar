@@ -1,6 +1,9 @@
 Prism.languages.parigp = {
 	'comment': /\/\*[\s\S]*?\*\/|\\\\.*/,
-	'string': /"(?:[^"\\]|\\.)*"/,
+	'string': {
+		pattern: /"(?:[^"\\\r\n]|\\.)*"/,
+		greedy: true
+	},
 	// PARI/GP does not care about white spaces at all
 	// so let's process the keywords to build an appropriate regexp
 	// (e.g. "b *r *e *a *k", etc.)
@@ -19,7 +22,7 @@ Prism.languages.parigp = {
 	'function': /\w[\w ]*?(?= *\()/,
 	'number': {
 		// The lookbehind and the negative lookahead prevent from breaking the .. operator
-		pattern: /((?:\. *\. *)?)(?:\d(?: *\d)*(?: *(?!\. *\.)\.(?: *\d)*)?|\. *\d(?: *\d)*)(?: *e *[+-]? *\d(?: *\d)*)?/i,
+		pattern: /((?:\. *\. *)?)(?:\b\d(?: *\d)*(?: *(?!\. *\.)\.(?: *\d)*)?|\. *\d(?: *\d)*)(?: *e *[+-]? *\d(?: *\d)*)?/i,
 		lookbehind: true
 	},
 	'operator': /\. *\.|[*\/!](?: *=)?|%(?: *=|(?: *#)?(?: *')*)?|\+(?: *[+=])?|-(?: *[-=>])?|<(?:(?: *<)?(?: *=)?| *>)?|>(?: *>)?(?: *=)?|=(?: *=){0,2}|\\(?: *\/)?(?: *=)?|&(?: *&)?|\| *\||['#~^]/,

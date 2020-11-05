@@ -1,31 +1,31 @@
-(function(Prism) {
-	var funcPattern = /\\([^a-z()[\]]|[a-z\*]+)/i,
-	    insideEqu = {
-		    'equation-command': {
-			    pattern: funcPattern,
-			    alias: 'regex'
-		    }
-	    };
+(function (Prism) {
+	var funcPattern = /\\(?:[^a-z()[\]]|[a-z*]+)/i;
+	var insideEqu = {
+		'equation-command': {
+			pattern: funcPattern,
+			alias: 'regex'
+		}
+	};
 
 	Prism.languages.latex = {
 		'comment': /%.*/m,
 		// the verbatim environment prints whitespace to the document
-		'cdata':  {
-			pattern: /(\\begin\{((?:verbatim|lstlisting)\*?)\})([\w\W]*?)(?=\\end\{\2\})/,
+		'cdata': {
+			pattern: /(\\begin\{((?:verbatim|lstlisting)\*?)\})[\s\S]*?(?=\\end\{\2\})/,
 			lookbehind: true
 		},
 		/*
-		 * equations can be between $ $ or \( \) or \[ \]
+		 * equations can be between $$ $$ or $ $ or \( \) or \[ \]
 		 * (all are multiline)
 		 */
 		'equation': [
 			{
-				pattern: /\$(?:\\?[\w\W])*?\$|\\\((?:\\?[\w\W])*?\\\)|\\\[(?:\\?[\w\W])*?\\\]/,
+				pattern: /\$\$(?:\\[\s\S]|[^\\$])+\$\$|\$(?:\\[\s\S]|[^\\$])+\$|\\\([\s\S]*?\\\)|\\\[[\s\S]*?\\\]/,
 				inside: insideEqu,
 				alias: 'string'
 			},
 			{
-				pattern: /(\\begin\{((?:equation|math|eqnarray|align|multline|gather)\*?)\})([\w\W]*?)(?=\\end\{\2\})/,
+				pattern: /(\\begin\{((?:equation|math|eqnarray|align|multline|gather)\*?)\})[\s\S]*?(?=\\end\{\2\})/,
 				lookbehind: true,
 				inside: insideEqu,
 				alias: 'string'
@@ -58,4 +58,7 @@
 		},
 		'punctuation': /[[\]{}&]/
 	};
+
+	Prism.languages.tex = Prism.languages.latex;
+	Prism.languages.context = Prism.languages.latex;
 })(Prism);

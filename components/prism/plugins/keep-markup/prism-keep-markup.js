@@ -11,6 +11,10 @@
 			return;
 		}
 
+		if (!Prism.util.isActive(env.element, 'keep-markup', true)) {
+			return;
+		}
+
 		var pos = 0;
 		var data = [];
 		var f = function (elt, baseNode) {
@@ -92,6 +96,8 @@
 					pos: 0
 				});
 			});
+			// Store new highlightedCode for later hooks calls
+			env.highlightedCode = env.element.innerHTML;
 		}
 	});
 }());

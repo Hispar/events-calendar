@@ -11,8 +11,8 @@
   "_release": "1.17.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.17.1",
-    "commit": "9b970e7b8ff7fcb95d2c4d9a41b33370af764fc9"
+    "tag": "1.17.1",
+    "commit": "953d816790587c5863ea1579620e90fa8999d669"
   },
   "_source": "https://github.com/blittle/sinon.js.git",
   "_target": "^1.14.1",
