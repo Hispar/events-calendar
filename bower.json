@@ -33,6 +33,7 @@
     "polymer": "^1.12.0",
     "webcomponentsjs": "^0.7.0",
     "paper-ripple": "^3.0.2",
-    "font-roboto": "^3.0.2"
+    "font-roboto": "^3.0.2",
+    "paper-button": "^3.0.1"
   }
 }
