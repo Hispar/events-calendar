@@ -39,7 +39,7 @@
 
         let calendar = document.querySelector('events-calendar');
         calendar.eventList = {
-            today : [
+            [today] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -53,7 +53,7 @@
                     category: 'Supervisor'
                 }
             ],
-            tomorrow : [
+            [tomorrow] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -61,7 +61,7 @@
                     category: 'Supervisor'
                 }
             ],
-            after_tomorrow : [
+            [after_tomorrow] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -71,9 +71,6 @@
             ]
         };
     </script>
-
 </template>
-
-
 </body>
 </html>
