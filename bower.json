@@ -3,13 +3,16 @@
   "description": "An events calendar web components",
   "main": "events-calendar.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.6.0",
+    "polymer": "Polymer/polymer#^1.12.0",
     "events-calendar": "hispar/events-calendar#master"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^3.0.0",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "resolutions": {
+    "paper-button": "^3.0.1"
   }
 }
