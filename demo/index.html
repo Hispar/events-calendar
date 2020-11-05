@@ -33,11 +33,11 @@
         let obj_date = new Date()
         let today = obj_date.toJSON().slice(0,10);
         obj_date.setDate(obj_date.getDate() + 1)
-        tomorrow = obj_date.toJSON().slice(0,10);
+        let tomorrow = obj_date.toJSON().slice(0,10);
         obj_date.setDate(obj_date.getDate() + 1)
-        after_tomorrow = obj_date.toJSON().slice(0,10);
+        let after_tomorrow = obj_date.toJSON().slice(0,10);
 
-        var calendar = document.querySelector('events-calendar');
+        let calendar = document.querySelector('events-calendar');
         calendar.eventList = {
             today : [
                 {
