@@ -14,31 +14,32 @@
     "url": "https://github.com/Hispar/events-calendar.git"
   },
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.6.0",
+    "polymer": "Polymer/polymer#^1.12.0",
     "fa-awesome": "^2.0.1",
     "moment": "^2.17.1",
-    "iron-collapse": "^v2.0.0",
-    "paper-dialog": "^1.1.0",
-    "paper-button": "^1.0.14"
+    "iron-collapse": "^v3.0.1",
+    "paper-dialog": "^3.0.1",
+    "paper-button": "^3.0.1"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^4.0.1",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^3.0.0",
+    "iron-doc-viewer": "PolymerElements/iron-doc-viewer #^4.0.0",
     "web-component-tester": "^4.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
   },
   "resolutions": {
-    "polymer": "^1.6.0",
+    "polymer": "^1.12.0",
     "webcomponentsjs": "^0.7.0",
-    "paper-ripple": "^1.0.0",
-    "font-roboto": "^1.0.1"
+    "paper-ripple": "^3.0.2",
+    "font-roboto": "^3.0.2"
   },
   "homepage": "https://github.com/hispar/events-calendar",
-  "_release": "38e673eda7",
+  "_release": "1089676478",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "38e673eda7e48449d3317ff3f25b29795e331ebc"
+    "commit": "1089676478ea835862bdbfc960c881d2ac763f73"
   },
   "_source": "https://github.com/hispar/events-calendar.git",
   "_target": "master",

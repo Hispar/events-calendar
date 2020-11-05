@@ -11,16 +11,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <html>
   <head>
-
     <title>iron-collapse-flex</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
-
-    <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-    <link rel="import" href="../iron-collapse.html">
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../node_modules/wct-browser-legacy/browser.js"></script>
 
     <custom-style><style is="custom-style" include="iron-flex"></style></custom-style>
   </head>
@@ -38,7 +34,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
     </test-fixture>
 
-    <script>
+    <script type="module">
+      import '@polymer/iron-flex-layout/iron-flex-layout-classes.js';
+      import '../iron-collapse.js';
       suite('flex', function() {
         var container;
         var collapse;
