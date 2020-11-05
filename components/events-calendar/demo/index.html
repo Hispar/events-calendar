@@ -33,13 +33,13 @@
         let obj_date = new Date()
         let today = obj_date.toJSON().slice(0,10);
         obj_date.setDate(obj_date.getDate() + 1)
-        tomorrow = obj_date.toJSON().slice(0,10);
+        let tomorrow = obj_date.toJSON().slice(0,10);
         obj_date.setDate(obj_date.getDate() + 1)
-        after_tomorrow = obj_date.toJSON().slice(0,10);
+        let after_tomorrow = obj_date.toJSON().slice(0,10);
 
-        var calendar = document.querySelector('events-calendar');
+        let calendar = document.querySelector('events-calendar');
         calendar.eventList = {
-            today : [
+            [today] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -53,7 +53,7 @@
                     category: 'Supervisor'
                 }
             ],
-            tomorrow : [
+            [tomorrow] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -61,7 +61,7 @@
                     category: 'Supervisor'
                 }
             ],
-            after_tomorrow : [
+            [after_tomorrow] : [
                 {
                     summary: '7-11 | S',
                     slot: '7:00-11:00',
@@ -71,9 +71,6 @@
             ]
         };
     </script>
-
 </template>
-
-
 </body>
 </html>
